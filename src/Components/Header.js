@@ -15,14 +15,19 @@ export default function Header(props) {
 
   const [Carrito, setCarrito] = useState([]);
   const [Pagar, setPagar] = useState("");
+  const [CarritoCant, setCarritoCant] = useState("");
 
   const Total = () => {
     var sumar = 0;
+    var CantidadItem = 0;
     Carrito.forEach(function (numero) {
       sumar += numero["Total"];
+      CantidadItem += numero["Cantidad"];
     });
     setPagar(sumar);
+    setCarritoCant(CantidadItem);
     console.log(Pagar);
+    console.log(CarritoCant);
   };
 
   const desconectarseUser = async (e) => {
@@ -67,16 +72,7 @@ export default function Header(props) {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                <input
-                  type="search"
-                  className="form-control form-control-dark "
-                  placeholder="Buscar Producto..."
-                  aria-label="Buscar"
-                />
-              </form>
-            </Nav>
+            <Nav className="me-auto"></Nav>
             {/* Carrito */}
             <Nav>
               {estadoAdmin ? (
@@ -95,7 +91,9 @@ export default function Header(props) {
                       >
                         <i className="fa-solid fa-cart-shopping"></i>
                         {"   "}Carrito
-                        <span class="badge bg-primary rounded-pill"></span>
+                        <span class="badge bg-primary rounded-pill">
+                          {CarritoCant}
+                        </span>
                       </a>
                       {/* Esta es la lista dentro del dropdown */}
                       <ul
@@ -103,8 +101,8 @@ export default function Header(props) {
                         aria-labelledby="navbarDarkDropdownMenuLink"
                       >
                         <div className="overflow-auto ">
-                          {Carrito.map((producto) => (
-                            <div key={producto.ProductoId}>
+                          {Carrito.map((producto, index) => (
+                            <div key={index}>
                               <div>
                                 <div
                                   className="card mb-1 "
@@ -114,8 +112,11 @@ export default function Header(props) {
                                     <div className="col-md-4">
                                       <img
                                         src={producto.Foto}
-                                        style={{ height: "100px" }}
-                                        className="img-fluid rounded-start"
+                                        style={{
+                                          height: "105px",
+                                          width: "110px",
+                                        }}
+                                        className="  img-fluid rounded-start"
                                         alt="..."
                                       />
                                     </div>
@@ -132,7 +133,10 @@ export default function Header(props) {
                                             {producto.PrecioUnitario}
                                           </small>
                                         </p>
-                                        <a type="button">
+                                        <a
+                                          type="button"
+                                          onClick={() => Prueba(producto.id)}
+                                        >
                                           <i
                                             className="material-icons text-dark p-2 position-absolute top-0 end-0  "
                                             data-toggle="tooltip"
@@ -151,9 +155,10 @@ export default function Header(props) {
                         </div>
 
                         <div>
-                          <Nav.Link href="" className="btn btn-success">
-                            <i className="fa-solid fa-money-check-dollar"></i>
-                            {"   "}Realizar Pago {" || "} Total : $ {Pagar}
+                          <Nav.Link href="/Login" className="btn btn-success">
+                            Su carrito esta Vacio!
+                            <br></br>
+                            Inicie Sesion
                           </Nav.Link>
                         </div>
                       </ul>

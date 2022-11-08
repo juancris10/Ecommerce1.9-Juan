@@ -20,7 +20,7 @@ const ProductCard = () => {
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 3,
+      items: 4,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -42,14 +42,12 @@ const ProductCard = () => {
       });
       setProductoImp(docs);
     });
+    console.log(ProductoImp)
   }, []);
-
-
 
   return (
     <div>
-      <div className="text-center mt-4 	">
-      </div>
+      <div className="text-center mt-4 	"></div>
       <div>
         <div className="d-block">
           <div
@@ -154,36 +152,36 @@ const ProductCard = () => {
 
       <div className="text-center mt-5 ">
         <h5 className=" display-6 border-light border-bottom border-3 	fa-brands">
-          Nuestros Productos
+          Todos los Productos
         </h5>
       </div>
-      <div className="mt-3">
+      <div className="">
         <Carousel
           responsive={responsive}
           infinite={true}
           autoPlaySpeed={5000}
           autoPlay={true}
+          draggable={true}
+          centerMode={true}
         >
           {ProductoImp.map((producto) => (
-            <div
-              className="card-id "
-              key={producto.id}
-              style={{ width: "25rem" , cursor: "pointer" }}
-            >
-              <div
-                className="card text-center justify-content-center pe-1"
-                style={{ marginLeft: "110px" }}
-              >
+            <div key={producto.id}>
+              <div className="card" style={{ width: "18rem" }}>
                 <img
                   src={producto.FotoProduct}
                   className=" mx-auto d-block img-fluid mt-3 rounded"
                   alt="..."
-                  style={{ height: "160px", width: "160px"}}
+                  style={{ height: "160px", width: "160px" }}
                 />
-                <div className="card-body"style={{ width: "18rem" , cursor: "pointer" }}>
-                  <h5 className="card-title 	fa-brands mb-3">{producto.NombreProduc}</h5>
+                <div className="card-body">
+                  <h5 className="card-title 	fa-brands">
+                    {producto.NombreProduc}
+      
+                  </h5>
                   <div className="d-flex justify-content-between  border-light border-bottom border-3">
-                    <h5 className=" card-title fs-4 display-5 	fa-brands">Precio</h5>
+                    <h5 className=" card-title fs-4 display-5 	fa-brands">
+                      Precio
+                    </h5>
                     <i className=" fa-dollar-sign card-title fs-5 display-5 	fa-brands">
                       {producto.Precio}
                     </i>
@@ -201,7 +199,26 @@ const ProductCard = () => {
             </div>
           ))}
         </Carousel>
-        <h5 className=" display-5 border-light border-bottom border-3 mt-2"></h5>
+        <div className="text-center mt-5">
+          <h5 className=" display-5 border-light border-bottom border-3 fa-brands">
+            Lacteos
+          </h5>
+        </div>
+        <Carousel
+          responsive={responsive}
+          infinite={true}
+          autoPlaySpeed={5000}
+          autoPlay={true}
+          draggable={true}
+          centerMode={true}
+        >
+          {ProductoImp.map((producto) => (
+            <h1>
+               {producto.Categoria}
+            </h1>
+           
+          ))}
+        </Carousel>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import Contexto from "../Context/Contexto";
 const Quantity = ({ ProdId, ProdPrecio,ProdFot,ProdNomb }) => {
   const { agregarCarrito } = useContext(Contexto);
   const [quantity, setQuantity] = useState(0);
+  
 
   // Increase Quantity
   const AddItems = () => setQuantity((quantity) => quantity + 1);

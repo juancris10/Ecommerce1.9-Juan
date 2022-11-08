@@ -59,11 +59,7 @@ export default function FirestoreContext(props){
         })
     }
 
-    const EliminarCarrito = async(id) =>{
-        const CarritoDoc = doc(fs,"Carrito",id)
-        await deleteDoc(CarritoDoc)
-
-    }
+   
 
 
 
@@ -79,7 +75,7 @@ export default function FirestoreContext(props){
                 clientes,
                 agregarCarrito,
                 Carrito,
-                EliminarCarrito
+                
                 
         
             }}>

@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword,signOut,signInWithEmailAndPassword,Googl
 import { auth } from "../Services/Firebase";
 
 //No puedo hacerlo en el Firestore, Asi que lo hago aca.
-import { addDoc,doc, collection,updateDoc,where,getDocs,query}  from "firebase/firestore";
+import { addDoc,doc, collection,updateDoc,where,getDocs,query,deleteDoc}  from "firebase/firestore";
 import { fs } from "../Services/Firebase";
 
 
@@ -100,6 +100,12 @@ export default function AuthContext(props){
         });
     }
 
+    const EliminarCarrito = async (id) =>{
+        const CarritoDoc = doc(fs,"Carrito",id)
+        await deleteDoc(CarritoDoc)
+
+    }
+
 
 
     return(
@@ -115,6 +121,7 @@ export default function AuthContext(props){
                 modoAdmin,
                 estadoAdmin,
                 user,
+                EliminarCarrito
 
                 
             }}>
