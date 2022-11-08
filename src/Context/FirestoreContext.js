@@ -8,6 +8,8 @@ export default function FirestoreContext(props){
 
     const { children } = props;
     const [ clientes, setClientes ] = useState([]);
+    const CarritoCollection = collection(fs,"Carrito")
+    const [Carrito,setCarrito] = useState([])
 
     const registro = async  (NombreProduc, Cantidad, FotoProduct, Precio, Value) => {
         await addDoc(collection(fs, "Productos"), {
@@ -44,6 +46,25 @@ export default function FirestoreContext(props){
     }
 
 
+    const agregarCarrito= async(ProdId,quantity,Total,ProdPrecio,ProdFot,ProdNomb) =>{
+
+        await addDoc(collection(fs,"Carrito"),{
+            ProductoId:ProdId,
+            Cantidad:quantity,
+            Total:Total,
+            Nombre:ProdNomb,
+            Foto:ProdFot,
+            PrecioUnitario:ProdPrecio
+
+        })
+    }
+
+    const EliminarCarrito = async(id) =>{
+        const CarritoDoc = doc(fs,"Carrito",id)
+        await deleteDoc(CarritoDoc)
+
+    }
+
 
 
 
@@ -55,7 +76,10 @@ export default function FirestoreContext(props){
                 modificar,
                 eliminar,
                 lstClientes,
-                clientes
+                clientes,
+                agregarCarrito,
+                Carrito,
+                EliminarCarrito
                 
         
             }}>

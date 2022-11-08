@@ -1,26 +1,70 @@
 import React from "react";
+import { useContext } from "react";
+import { useState } from "react";
+import Contexto from "../Context/Contexto";
 
-const Quantity = ({ quantity, AddItems, DecreaseItems }) => {
+const Quantity = ({ ProdId, ProdPrecio,ProdFot,ProdNomb }) => {
+  const { agregarCarrito } = useContext(Contexto);
+  const [quantity, setQuantity] = useState(0);
+
+  // Increase Quantity
+  const AddItems = () => setQuantity((quantity) => quantity + 1);
+
+  // Decrease Quantity
+  const DecreaseItems = () => {
+    if (quantity > 0) setQuantity((quantity) => quantity - 1);
+  };
+  var Total = ProdPrecio * quantity;
+  const handleQuantity = async (e) => {
+    e.preventDefault();
+    await agregarCarrito(ProdId, quantity, Total,ProdPrecio,ProdFot,ProdNomb);
+
+    setQuantity(0);
+
+  };
+
   return (
-    <div className="input-group mb-2">
-      <span className="input-group-btn d-grid gap-2 d-flex">
-        <button type="button" className=" btn btn-info" onClick={DecreaseItems}>
-          <i className="fa-solid fa-minus"></i>
-        </button>
-      </span>
-      <input
-        type="text"
-        value={quantity}
-        name="quantity"
-        readOnly
-        className="form-control input-number text-center fs-5"
-      ></input>
-      <span className="input-group-btn d-flex gap-2">
-        <button type="button" className="btn btn-success" onClick={AddItems}>
-          <i className="fa-solid fa-plus"></i>
-        </button>
-      </span>
-    </div>
+    <form onSubmit={handleQuantity}>
+      <div className="input-group mb-2" key={ProdId}>
+        <span className="input-group-btn">
+          <button
+            type="button"
+            className=" btn btn-info"
+            onClick={DecreaseItems}
+          >
+            <i className="fa-solid fa-minus"></i>
+          </button>
+        </span>
+        <input
+          type="text"
+          value={quantity}
+          name="quantity"
+          disabled
+          className="form-control input-number text-center fs-4"
+          onChange={(e) => setQuantity(e.target.value)}
+        ></input>
+        <span className="input-group-btn  ">
+          <button type="button" className="btn btn-success" onClick={AddItems}>
+            <i className="fa-solid fa-plus"></i>
+          </button>
+        </span>
+        <div
+          className="d-flex text-center "
+          style={{
+            alignSelf: "center",
+            textAlign: "center",
+            display: "block",
+            alignItems: "center",
+            margin: "auto",
+            width: "65%",
+          }}
+        >
+          <button className="btn btn-outline-light fs-6  display-5 	 mt-3">
+            <i class="fa-solid fa-cart-shopping">Agregar</i>
+          </button>
+        </div>
+      </div>
+    </form>
   );
 };
 

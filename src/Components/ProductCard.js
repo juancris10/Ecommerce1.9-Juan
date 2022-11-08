@@ -11,15 +11,7 @@ import Quantity from "./Quantity";
 const ProductCard = () => {
   const [ProductoImp, setProductoImp] = useState([]);
   // Quantity State
-  const [quantity, setQuantity] = useState(0);
 
-  // Increase Quantity
-  const AddItems = () => setQuantity((quantity) => quantity + 1);
-
-  // Decrease Quantity
-  const DecreaseItems = () => {
-    if (quantity > 0) setQuantity((quantity) => quantity - 1);
-  };
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -48,17 +40,15 @@ const ProductCard = () => {
       querysnapshot.forEach((productos) => {
         docs.push({ ...productos.data(), id: productos.id });
       });
-      console.log(docs);
       setProductoImp(docs);
     });
   }, []);
 
+
+
   return (
     <div>
-      <div className="text-center">
-        <h5 className=" display-2 border-light border-bottom border-3 m-2">
-          Bienvenido al Supermercado Libertad
-        </h5>
+      <div className="text-center mt-4 	">
       </div>
       <div>
         <div className="d-block">
@@ -95,20 +85,41 @@ const ProductCard = () => {
                   className="img-fluid"
                   src="https://i.imgur.com/8TJ2KL1.jpg"
                   alt="..."
-                  style={{alignSelf:"center",textAlign:"center",display:"block",alignItems:"center",margin:"auto",width:"60%"}}
+                  style={{
+                    alignSelf: "center",
+                    textAlign: "center",
+                    display: "block",
+                    alignItems: "center",
+                    margin: "auto",
+                    width: "60%",
+                  }}
                 />
               </div>
               <div className="carousel-item ">
                 <img
                   src="https://i.imgur.com/pfyXeEt.jpg"
-                  style={{alignSelf:"center",textAlign:"center",display:"block",alignItems:"center",margin:"auto",width:"60%"}}
+                  style={{
+                    alignSelf: "center",
+                    textAlign: "center",
+                    display: "block",
+                    alignItems: "center",
+                    margin: "auto",
+                    width: "60%",
+                  }}
                   alt="..."
                 />
               </div>
               <div className="carousel-item">
                 <img
                   src="https://i.imgur.com/rFwaelK.jpg"
-                  style={{alignSelf:"center",textAlign:"center",display:"block",alignItems:"center",margin:"auto",width:"60%"}}
+                  style={{
+                    alignSelf: "center",
+                    textAlign: "center",
+                    display: "block",
+                    alignItems: "center",
+                    margin: "auto",
+                    width: "60%",
+                  }}
                   alt="..."
                 />
               </div>
@@ -141,24 +152,23 @@ const ProductCard = () => {
         </div>
       </div>
 
-      <div className="text-center">
-        <h5 className=" display-5 border-light border-bottom border-3 mt-5">
+      <div className="text-center mt-5 ">
+        <h5 className=" display-6 border-light border-bottom border-3 	fa-brands">
           Nuestros Productos
         </h5>
       </div>
-      <div className="mt-4">
+      <div className="mt-3">
         <Carousel
           responsive={responsive}
           infinite={true}
           autoPlaySpeed={5000}
           autoPlay={true}
-          itemClass="carousel-item-padding-70-px"
         >
           {ProductoImp.map((producto) => (
             <div
               className="card-id "
-              style={{ width: "27rem", cursor: "pointer" }}
               key={producto.id}
+              style={{ width: "25rem" , cursor: "pointer" }}
             >
               <div
                 className="card text-center justify-content-center pe-1"
@@ -166,29 +176,25 @@ const ProductCard = () => {
               >
                 <img
                   src={producto.FotoProduct}
-                  className="rounded mx-auto d-block img-fluid p-2"
+                  className=" mx-auto d-block img-fluid mt-3 rounded"
                   alt="..."
-                  style={{ height: "200px", width: "200px" }}
+                  style={{ height: "160px", width: "160px"}}
                 />
-                <div className="card-body">
-                  <h5 className="card-title">{producto.NombreProduc}</h5>
+                <div className="card-body"style={{ width: "18rem" , cursor: "pointer" }}>
+                  <h5 className="card-title 	fa-brands mb-3">{producto.NombreProduc}</h5>
                   <div className="d-flex justify-content-between  border-light border-bottom border-3">
-                    <h5 className=" card-title fs-4 display-5">Precio</h5>
-                    <i className=" fa-dollar-sign card-title fs-5 display-5">
+                    <h5 className=" card-title fs-4 display-5 	fa-brands">Precio</h5>
+                    <i className=" fa-dollar-sign card-title fs-5 display-5 	fa-brands">
                       {producto.Precio}
                     </i>
                   </div>
                   <div className="mt-2 ">
                     <Quantity
-                      quantity={producto.Cantidad}
-                      AddItems={AddItems}
-                      DecreaseItems={DecreaseItems}
+                      ProdId={producto.id}
+                      ProdNomb={producto.NombreProduc}
+                      ProdPrecio={producto.Precio}
+                      ProdFot={producto.FotoProduct}
                     />
-                  </div>
-                  <div className="text-center">
-                    <button className="btn btn-outline-light fs-6  display-5 ">
-                      <i class="fa-solid fa-cart-shopping "> Agregar</i>
-                    </button>
                   </div>
                 </div>
               </div>
