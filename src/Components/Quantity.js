@@ -3,10 +3,9 @@ import { useContext } from "react";
 import { useState } from "react";
 import Contexto from "../Context/Contexto";
 
-const Quantity = ({ ProdId, ProdPrecio,ProdFot,ProdNomb }) => {
-  const { agregarCarrito } = useContext(Contexto);
+const Quantity = ({ ProdId, ProdPrecio, ProdFot, ProdNomb }) => {
+  const { agregarCarrito, user } = useContext(Contexto);
   const [quantity, setQuantity] = useState(0);
-  
 
   // Increase Quantity
   const AddItems = () => setQuantity((quantity) => quantity + 1);
@@ -16,12 +15,25 @@ const Quantity = ({ ProdId, ProdPrecio,ProdFot,ProdNomb }) => {
     if (quantity > 0) setQuantity((quantity) => quantity - 1);
   };
   var Total = ProdPrecio * quantity;
+
+  try {
+    var usuario = user.email;
+  } catch (error) {
+    console.log("Error");
+  }
   const handleQuantity = async (e) => {
     e.preventDefault();
-    await agregarCarrito(ProdId, quantity, Total,ProdPrecio,ProdFot,ProdNomb);
+    await agregarCarrito(
+      ProdId,
+      quantity,
+      Total,
+      ProdPrecio,
+      ProdFot,
+      ProdNomb,
+      usuario
+    );
 
     setQuantity(0);
-
   };
 
   return (
@@ -37,6 +49,7 @@ const Quantity = ({ ProdId, ProdPrecio,ProdFot,ProdNomb }) => {
           </button>
         </span>
         <input
+          style={{ cursot: "pointer" }}
           type="text"
           value={quantity}
           name="quantity"
@@ -60,8 +73,8 @@ const Quantity = ({ ProdId, ProdPrecio,ProdFot,ProdNomb }) => {
             width: "65%",
           }}
         >
-          <button className="btn btn-outline-light fs-6  display-5 	 mt-3">
-            <i class="fa-solid fa-cart-shopping">Agregar</i>
+          <button className="btn btn-outline-light fs-6  display-5 	 mt-3" style={{cursot:"pointer"}}>
+            <i className="fa-solid fa-cart-shopping">Agregar</i>
           </button>
         </div>
       </div>

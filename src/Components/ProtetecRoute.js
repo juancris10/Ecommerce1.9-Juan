@@ -13,7 +13,6 @@ export default function ProtetecRoute(props){
     //Cambiar al firestoreContext
 
     if (user){
-        console.log("conectado?")
         const estado = true;
         const email = user.email;
         const nombre = user.displayName;

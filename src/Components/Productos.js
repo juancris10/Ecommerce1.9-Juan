@@ -156,7 +156,7 @@ export default function Productos() {
                 <div>
                   <label>Foto Producto</label>
                   <input type="text" className="form-control" placeholder="Ingrese la Url de la Imagen..." required onChange={(e) => setFotoProduct(e.target.value)}/>
-                    <div class="custom-file">
+                    <div className="custom-file">
                         <input type="file" className="custom-file-input btn btn-transparent" id="customFileLang" lang="es"/>
                     </div>
                 </div>
@@ -198,7 +198,7 @@ export default function Productos() {
                 <div>
                   <label>Foto Producto</label>
                   <input type="text" className="form-control" placeholder="Ingrese la Url de la Imagen..." required onChange={(e) => setFotoProduct(e.target.value)}/>
-                    <div class="custom-file">
+                    <div className="custom-file">
                         <input type="file" className="custom-file-input btn btn-transparent" id="customFileLang" lang="es"/>
                     </div>
                 </div>

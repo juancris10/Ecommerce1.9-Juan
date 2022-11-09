@@ -3,13 +3,14 @@ import React from "react";
 
 import { useState, useContext, useEffect } from "react";
 import { fs } from "../Services/Firebase";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot, where } from "firebase/firestore";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Quantity from "./Quantity";
 
 const ProductCard = () => {
   const [ProductoImp, setProductoImp] = useState([]);
+  const [ProdLacteos, setProdLacteos] = useState([]);
   // Quantity State
 
   const responsive = {
@@ -42,8 +43,8 @@ const ProductCard = () => {
       });
       setProductoImp(docs);
     });
-    console.log(ProductoImp)
   }, []);
+
 
   return (
     <div>
@@ -55,7 +56,7 @@ const ProductCard = () => {
             className="carousel slide"
             data-bs-ride="carousel"
           >
-            <div class="carousel-indicators">
+            <div className="carousel-indicators">
               <button
                 type="button"
                 data-bs-target="#carouselExampleIndicators"
@@ -161,22 +162,22 @@ const ProductCard = () => {
           infinite={true}
           autoPlaySpeed={5000}
           autoPlay={true}
-          draggable={true}
+          draggable={false}
           centerMode={true}
+          FocusOnSelect={false}
         >
           {ProductoImp.map((producto) => (
             <div key={producto.id}>
-              <div className="card" style={{ width: "18rem" }}>
+              <div className="card" style={{ width: "18rem" ,cursor:"pointer"}}>
                 <img
                   src={producto.FotoProduct}
                   className=" mx-auto d-block img-fluid mt-3 rounded"
                   alt="..."
-                  style={{ height: "160px", width: "160px" }}
+                  style={{ height: "160px", width: "160px"}}
                 />
                 <div className="card-body">
                   <h5 className="card-title 	fa-brands">
                     {producto.NombreProduc}
-      
                   </h5>
                   <div className="d-flex justify-content-between  border-light border-bottom border-3">
                     <h5 className=" card-title fs-4 display-5 	fa-brands">
@@ -197,26 +198,6 @@ const ProductCard = () => {
                 </div>
               </div>
             </div>
-          ))}
-        </Carousel>
-        <div className="text-center mt-5">
-          <h5 className=" display-5 border-light border-bottom border-3 fa-brands">
-            Lacteos
-          </h5>
-        </div>
-        <Carousel
-          responsive={responsive}
-          infinite={true}
-          autoPlaySpeed={5000}
-          autoPlay={true}
-          draggable={true}
-          centerMode={true}
-        >
-          {ProductoImp.map((producto) => (
-            <h1>
-               {producto.Categoria}
-            </h1>
-           
           ))}
         </Carousel>
       </div>

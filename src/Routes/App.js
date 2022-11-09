@@ -20,8 +20,8 @@ export default function App(){
           <AuthContext>
             <Routes>
                 <Route exact path="Login" element={<Login/>}></Route>
-                <Route exact path="/Home" element={<Layout><FirestoreContext><Home /></FirestoreContext></Layout>}></Route>
-                <Route exact path="*" element={<Layout><ProtetecRoute><FirestoreContext><Home /></FirestoreContext></ProtetecRoute></Layout>}></Route>                
+                <Route exact path="/Home" element={<Layout><Home/></Layout>}></Route>
+                <Route exact path="/*" element={<Layout><ProtetecRoute><Home /></ProtetecRoute></Layout>}></Route>                
                 <Route exact path="/Productos" element={<ProtetecRoute><FirestoreContext><Productos/></FirestoreContext></ProtetecRoute>}></Route>
                 <Route exact path="/Clientes" element={<ProtetecRoute><FirestoreContext><Clientes/></FirestoreContext></ProtetecRoute>}></Route>                <Route exact path="Registro" element={<Registro/>}></Route>
             </Routes>

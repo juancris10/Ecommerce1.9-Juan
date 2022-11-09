@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import Contexto from "../Context/Contexto";
-import { fs } from "../Services/Firebase";
-import { collection, query, onSnapshot } from "firebase/firestore";
 export default function Header(props) {
   const {
     desconectar,
@@ -11,11 +9,17 @@ export default function Header(props) {
     estadoAdmin,
     modoAdmin,
     EliminarCarrito,
+    Carrito,
+    lstCarritoUser,
   } = useContext(Contexto);
 
-  const [Carrito, setCarrito] = useState([]);
   const [Pagar, setPagar] = useState("");
   const [CarritoCant, setCarritoCant] = useState("");
+
+  try {
+    var Usuario = user.email;
+  } catch (error) {
+  }
 
   const Total = () => {
     var sumar = 0;
@@ -26,8 +30,6 @@ export default function Header(props) {
     });
     setPagar(sumar);
     setCarritoCant(CantidadItem);
-    console.log(Pagar);
-    console.log(CarritoCant);
   };
 
   const desconectarseUser = async (e) => {
@@ -42,25 +44,16 @@ export default function Header(props) {
     }
   };
 
-  useEffect(() => {
-    const colRef = collection(fs, "Carrito");
-    const q = query(colRef);
-    const mostrarDatos = onSnapshot(q, (querysnapshot) => {
-      const docs = [];
-      querysnapshot.forEach((productos) => {
-        docs.push({ ...productos.data(), id: productos.id });
-      });
-      console.log(docs);
-      setCarrito(docs);
-    });
-  }, []);
+  const ListaCarrito = async () => {
+    await lstCarritoUser(Usuario);
+  };
 
   useEffect(() => {
     Total();
   });
 
-  const Prueba = (id) => {
-    EliminarCarrito(id);
+  const ElimnarCarri = (id) => {
+    EliminarCarrito(id, Usuario);
   };
 
   return (
@@ -88,12 +81,19 @@ export default function Header(props) {
                         role="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
+                        onClick={() => {
+                          ListaCarrito();
+                        }}
                       >
                         <i className="fa-solid fa-cart-shopping"></i>
                         {"   "}Carrito
-                        <span class="badge bg-primary rounded-pill">
-                          {CarritoCant}
-                        </span>
+                        {user ? (
+                          <span className="badge bg-primary rounded-pill">
+                            {CarritoCant}
+                          </span>
+                        ) : (
+                          <span className="badge bg-primary rounded-pill">0</span>
+                        )}
                       </a>
                       {/* Esta es la lista dentro del dropdown */}
                       <ul
@@ -101,65 +101,83 @@ export default function Header(props) {
                         aria-labelledby="navbarDarkDropdownMenuLink"
                       >
                         <div className="overflow-auto ">
-                          {Carrito.map((producto, index) => (
-                            <div key={index}>
-                              <div>
-                                <div
-                                  className="card mb-1 "
-                                  style={{ width: "400px", height: "105px" }}
-                                >
-                                  <div className="row g-0">
-                                    <div className="col-md-4">
-                                      <img
-                                        src={producto.Foto}
-                                        style={{
-                                          height: "105px",
-                                          width: "110px",
-                                        }}
-                                        className="  img-fluid rounded-start"
-                                        alt="..."
-                                      />
-                                    </div>
-                                    <div className="col-md-8">
-                                      <div className="card-body ">
-                                        <h5 className="card-title ">
-                                          {producto.Nombre} x{" "}
-                                          {producto.Cantidad}
-                                        </h5>
-                                        <p className="card-text">
-                                          <small className="">
-                                            {" "}
-                                            Precio por Unidad: ${" "}
-                                            {producto.PrecioUnitario}
-                                          </small>
-                                        </p>
-                                        <a
-                                          type="button"
-                                          onClick={() => Prueba(producto.id)}
-                                        >
-                                          <i
-                                            className="material-icons text-dark p-2 position-absolute top-0 end-0  "
-                                            data-toggle="tooltip"
-                                            title="Delete"
-                                          >
-                                            &#xE872;
-                                          </i>
-                                        </a>
+                          {user ? (
+                            <>
+                              {Carrito.map((producto, index) => (
+                                <div key={index}>
+                                  <div>
+                                    <div
+                                      className="card mb-1 "
+                                      style={{
+                                        width: "400px",
+                                        height: "105px",
+                                      }}
+                                    >
+                                      <div className="row g-0">
+                                        <div className="col-md-4">
+                                          <img
+                                            src={producto.Foto}
+                                            style={{
+                                              height: "105px",
+                                              width: "110px",
+                                            }}
+                                            className="  img-fluid rounded-start"
+                                            alt="..."
+                                          />
+                                        </div>
+                                        <div className="col-md-8">
+                                          <div className="card-body ">
+                                            <h5 className="card-title ">
+                                              {producto.Nombre} x{" "}
+                                              {producto.Cantidad}
+                                            </h5>
+                                            <p className="card-text">
+                                              <small className="">
+                                                {" "}
+                                                Precio por Unidad: ${" "}
+                                                {producto.PrecioUnitario}
+                                              </small>
+                                            </p>
+                                            <a
+                                              type="button"
+                                              onClick={() =>
+                                                ElimnarCarri(producto.id)
+                                              }
+                                            >
+                                              <i
+                                                className="material-icons text-dark p-2 position-absolute top-0 end-0  "
+                                                data-toggle="tooltip"
+                                                title="Delete"
+                                              >
+                                                &#xE872;
+                                              </i>
+                                            </a>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                          ))}
+                              ))}
+                            </>
+                          ) : (
+                            <h1></h1>
+                          )}
                         </div>
 
                         <div>
-                          <Nav.Link href="/Login" className="btn btn-success">
-                            Su carrito esta Vacio!
-                            <br></br>
-                            Inicie Sesion
-                          </Nav.Link>
+                          {user ? (
+                            <Nav.Link href="" className="btn btn-success">
+                              <i className="fa-solid fa-money-check-dollar"></i>
+                              {"   "}Realizar Pago {" || "} : Total ${Pagar}
+                            </Nav.Link>
+                          ) : (
+                            <Nav.Link href="/Login" className="btn btn-success">
+                              Su carrito esta Vacio!
+                              <br></br>
+                              Inicie Sesion
+                            </Nav.Link>
+                          )}
                         </div>
                       </ul>
                       {/* Esta es la lista dentro del dropdown */}

@@ -24,7 +24,7 @@ export default function Registro(){
         navigate("/");
     }
 
-
+    
     return(
         <>
             <Container>
@@ -40,29 +40,29 @@ export default function Registro(){
                                 <div className="modal-body">
                                     <div className="form-group">
                                         <label>Nombre</label>
-                                        <input type="text" className="form-control" required onChange={(ev)=> setNombre(ev.target.value)}/>
+                                        <input type="text" className="form-control" required={true} onChange={(ev)=> setNombre(ev.target.value)}/>
                                     </div>
                                     <div className="form-group">
                                         <label>Apellido</label>
-                                        <input type="text" className="form-control" required onChange={(ev)=> setApellido(ev.target.value)}/>
+                                        <input type="text" className="form-control" required={true} onChange={(ev)=> setApellido(ev.target.value)}/>
                                     </div>
                                     <div className="form-group">
                                         <label>Número Telefono</label>
-                                        <input type="text" className="form-control" required onChange={(ev)=> setNumeroTel(ev.target.value)}/>
+                                        <input type="text" className="form-control" required={true} onChange={(ev)=> setNumeroTel(ev.target.value)}/>
                                     </div>
                                     <div className="form-group">
                                         <label>Email</label>
-                                        <input type="email" className="form-control" required onChange={(ev)=> setEmail(ev.target.value)}/>
+                                        <input type="email" className="form-control" required={true} onChange={(ev)=> setEmail(ev.target.value)}/>
                                     </div>
                                     <div className="form-group">
                                         <label>Contraseña</label>
-                                        <input type="password" className="form-control" required onChange={(ev)=> setPassword(ev.target.value)}/>
+                                        <input type="password" className="form-control" required={true} onChange={(ev)=> setPassword(ev.target.value)}/>
                                     </div>
                                 </div>
                                 <br></br>
                                 <div className="modal-footer">
                                     <Nav.Link href="/"><input type="button" className="btn btn-default" data-dismiss="modal" value="Volver" /></Nav.Link>
-                                    <input type="submit" className="btn btn-success" value="Registrar" onClick={registrarUsuario}/>
+                                    <input type="submit" className="btn btn-success" value="Registrar"  onClick={registrarUsuario}/>
                                 </div>
                             </Card.Body>
                         </Card>
