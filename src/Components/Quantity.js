@@ -1,29 +1,33 @@
-import React from "react";
-import { useContext } from "react";
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 import Contexto from "../Context/Contexto";
 
-const Quantity = ({ ProdId, ProdPrecio, ProdFot, ProdNomb }) => {
-  const { agregarCarrito, user } = useContext(Contexto);
-  const [quantity, setQuantity] = useState(0);
+class Quantity extends React.Component {
+  constructor(props) {
+    super(props);
 
-  // Increase Quantity
-  const AddItems = () => setQuantity((quantity) => quantity + 1);
+    this.state = {
+      quantity: 0,
+    };
 
-  // Decrease Quantity
-  const DecreaseItems = () => {
-    if (quantity > 0) setQuantity((quantity) => quantity - 1);
-  };
-  var Total = ProdPrecio * quantity;
-
-  try {
-    var usuario = user.email;
-  } catch (error) {
-    console.log("Error");
+    this.agregarCarrito = this.agregarCarrito.bind(this);
+    this.AddItems = this.AddItems.bind(this);
+    this.DecreaseItems = this.DecreaseItems.bind(this);
+    this.handleQuantity = this.handleQuantity.bind(this);
   }
-  const handleQuantity = async (e) => {
-    e.preventDefault();
-    await agregarCarrito(
+
+  static contextType = Contexto;
+
+  agregarCarrito(
+    ProdId,
+    quantity,
+    Total,
+    ProdPrecio,
+    ProdFot,
+    ProdNomb,
+    usuario
+  ) {
+    const { agregarCarrito } = this.context;
+    agregarCarrito(
       ProdId,
       quantity,
       Total,
@@ -32,54 +36,95 @@ const Quantity = ({ ProdId, ProdPrecio, ProdFot, ProdNomb }) => {
       ProdNomb,
       usuario
     );
+    this.setState({ quantity: 0 });
+  }
 
-    setQuantity(0);
-  };
+  AddItems() {
+    this.setState((prevState) => ({ quantity: prevState.quantity + 1 }));
+  }
 
-  return (
-    <form onSubmit={handleQuantity}>
-      <div className="input-group mb-2" key={ProdId}>
-        <span className="input-group-btn">
-          <button
-            type="button"
-            className=" btn btn-info"
-            onClick={DecreaseItems}
+  DecreaseItems() {
+    if (this.state.quantity > 0) {
+      this.setState((prevState) => ({ quantity: prevState.quantity - 1 }));
+    }
+  }
+
+  handleQuantity(e) {
+    e.preventDefault();
+    const { ProdId, ProdPrecio, ProdFot, ProdNomb } = this.props;
+    const { quantity } = this.state;
+    try {
+      const usuario = this.context.user.email;
+      this.agregarCarrito(
+        ProdId,
+        quantity,
+        ProdPrecio * quantity,
+        ProdPrecio,
+        ProdFot,
+        ProdNomb,
+        usuario
+      );
+    } catch (error) {
+      console.log("Error");
+    }
+  }
+
+  render() {
+    const { quantity } = this.state;
+
+    return (
+      <form onSubmit={this.handleQuantity}>
+        <div className="input-group mb-2" key={this.props.ProdId}>
+          <span className="input-group-btn">
+            <button
+              type="button"
+              className=" btn btn-info"
+              onClick={this.DecreaseItems}
+            >
+              <i className="fa-solid fa-minus"></i>
+            </button>
+          </span>
+          <input
+            style={{ cursor: "pointer" }}
+            type="text"
+            value={quantity}
+            name="quantity"
+            disabled
+            className="form-control input-number text-center fs-4"
+            onChange={(e) => this.setState({ quantity: e.target.value })}
+          ></input>
+          <span className="input-group-btn  ">
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={this.AddItems}
+            >
+              <i className="fa-solid fa-plus"></i>
+            </button>
+          </span>
+          <div
+            className="d-flex text-center "
+            style={{
+              alignSelf: "center",
+              textAlign: "center",
+              display: "block",
+              alignItems: "center",
+              margin: "auto",
+              width: "65%",
+            }}
           >
-            <i className="fa-solid fa-minus"></i>
-          </button>
-        </span>
-        <input
-          style={{ cursot: "pointer" }}
-          type="text"
-          value={quantity}
-          name="quantity"
-          disabled
-          className="form-control input-number text-center fs-4"
-          onChange={(e) => setQuantity(e.target.value)}
-        ></input>
-        <span className="input-group-btn  ">
-          <button type="button" className="btn btn-success" onClick={AddItems}>
-            <i className="fa-solid fa-plus"></i>
-          </button>
-        </span>
-        <div
-          className="d-flex text-center "
-          style={{
-            alignSelf: "center",
-            textAlign: "center",
-            display: "block",
-            alignItems: "center",
-            margin: "auto",
-            width: "65%",
-          }}
-        >
-          <button className="btn btn-outline-light fs-6  display-5 	 mt-3" style={{cursot:"pointer"}}>
-            <i className="fa-solid fa-cart-shopping">Agregar</i>
-          </button>
+            <button
+              className="btn btn-outline-light fs-6  display-5 	 mt-3"
+              style={{ cursor: "pointer" }}
+            >
+              <i className="fa-solid fa-cart-shopping">Agregar</i>
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
-  );
-};
+      </form>
+    );
+  }
+}
 
 export default Quantity;
+

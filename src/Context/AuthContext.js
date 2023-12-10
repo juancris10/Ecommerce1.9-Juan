@@ -124,6 +124,8 @@ export default function AuthContext(props) {
     });
   };
 
+
+
   const agregarCarrito = async (
     ProdId,
     quantity,
@@ -135,18 +137,58 @@ export default function AuthContext(props) {
   ) => {
     const q = query(collection(fs, "usuario"), where("Email", "==", usuario));
     const querySnapshot = await getDocs(q);
-
+  
+    const products = [];
+  
     querySnapshot.forEach((document) => {
-      addDoc(collection(fs, "usuario", document.id, "Carrito"), {
-        ProductoId: ProdId,
-        Cantidad: quantity,
-        Total: Total,
-        Nombre: ProdNomb,
-        Foto: ProdFot,
-        PrecioUnitario: ProdPrecio,
-      });
+      const carritoRef = collection(fs, "usuario", document.id, "Carrito");
+      const qProducto = query(
+        carritoRef,
+        where("ProductoId", "==", ProdId)
+      );
+  
+      // Agregar la promesa a la lista
+      products.push(getDocs(qProducto));
+    });
+  
+    // Esperar a que todas las consultas se completen
+    Promise.all(products).then(async (queryResults) => {
+      for (let i = 0; i < queryResults.length; i++) {
+        const queryProducto = queryResults[i];
+        const carritoRef = collection(fs, "usuario", querySnapshot.docs[i].id, "Carrito");
+    
+        if (queryProducto && queryProducto.size > 0) {
+          // Resto del código si el producto ya existe en el carrito...
+          queryProducto.forEach((productoDoc) => {
+            const cantidadActual = productoDoc.data().Cantidad;
+            const totalActual = productoDoc.data().Total;
+            const nuevoTotal = totalActual + Total;
+            updateDoc(productoDoc.ref, {
+              Cantidad: cantidadActual + quantity,
+              Total: nuevoTotal,
+            });
+          });
+        } else {
+          // Resto del código si el producto no existe en el carrito...
+          // Asegúrate de que carritoRef sea una colección válida
+          console.log("Tipo de carritoRef:", typeof carritoRef);
+    
+          // Necesitas await aquí para asegurar que add() termine antes de pasar al siguiente ciclo
+          await addDoc(carritoRef, {
+            ProductoId: ProdId,
+            Cantidad: quantity,
+            Total: Total,
+            Nombre: ProdNomb,
+            Foto: ProdFot,
+            PrecioUnitario: ProdPrecio,
+          });
+        }
+      }
     });
   };
+  
+  
+  
 
   const EliminarCarrito = async (id, usuario) => {
     const q = query(collection(fs, "usuario"), where("Email", "==", usuario));
